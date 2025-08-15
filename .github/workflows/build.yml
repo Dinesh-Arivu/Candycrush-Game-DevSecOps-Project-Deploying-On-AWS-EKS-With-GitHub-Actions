@@ -35,4 +35,18 @@ jobs:
 
       - name: Image scan
         run: trivy image dinesh1097/candycrushgithubaction:latest > trivyimage.txt  
+
+  deploy:
+   needs: build-analyze-scan   
+   runs-on: [self-hosted]
+   steps:
+      - name: docker pull image
+        run: docker pull dinesh1097/candycrushgithubaction:latest
+
+      - name: Image scan
+        run: trivy image dinesh1097/candycrushgithubaction:latest > trivyimagedeploy.txt  
+  
+      - name: Deploy to container
+        run: docker run -d --name candycrush -p 3000:3000 dinesh1097/candycrushgithubaction:latest
+     
           
